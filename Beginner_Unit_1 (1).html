@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Mari — Beginner Unit 1</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#fff;color:#1a1a1a;max-width:720px;margin:0 auto;padding:0 20px 40px}
+
+/* HEADER */
+.header{padding:24px 0 0;margin-bottom:0}
+.header h1{font-size:13px;font-weight:500;color:#f4521e;text-transform:uppercase;letter-spacing:.5px}
+.header h2{font-size:20px;font-weight:600;margin-top:4px;color:#5340c8}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1.5px solid #e0e0e0;margin-bottom:28px;gap:0;overflow-x:auto}
+.tab{padding:12px 18px;font-size:14px;font-weight:500;color:#5340c8;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;white-space:nowrap;transition:all .15s}
+.tab:hover{color:#3c3489}
+.tab.active{color:#5340c8;border-bottom-color:#5340c8}
+
+/* SECTIONS */
+.section{display:none}
+.section.active{display:block}
+.section-title{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid #f0f0f0}
+
+/* INSTRUCTIONS */
+.instructions{font-size:15px;font-weight:600;margin-bottom:6px}
+.example{font-size:13px;color:#888;margin-bottom:20px;padding-left:10px;border-left:2px solid #e0e0e0}
+
+/* MC */
+.mc-item{margin-bottom:20px}
+.mc-stem{font-size:14px;margin-bottom:8px;display:flex;gap:8px}
+.mc-num{color:#888;min-width:18px;font-size:14px}
+.mc-opts{display:flex;gap:8px;flex-wrap:wrap;padding-left:26px}
+.mc-btn{padding:6px 16px;border-radius:6px;border:1px solid #d0d0d0;background:#fff;font-size:14px;cursor:pointer;font-family:inherit;transition:all .15s}
+.mc-btn:hover{border-color:#888;background:#f9f9f9}
+.mc-btn.ok{background:#eaf3de;border-color:#639922;color:#3b6d11;cursor:default}
+.mc-btn.bad{background:#fcebeb;border-color:#e24b4a;color:#a32d2d;cursor:default}
+.mc-btn.disabled{cursor:default}
+.mc-fb{font-size:13px;margin-top:6px;padding-left:26px;color:#888}
+.mc-fb.ok{color:#3b6d11}
+.mc-fb.bad{color:#a32d2d}
+
+/* PASSAGE */
+.passage{font-size:14px;line-height:1.9;padding:14px 16px;background:#fafafa;border-radius:8px;margin-bottom:20px;color:#333}
+
+/* TF */
+.tf-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0f0f0;gap:12px;flex-wrap:wrap}
+.tf-stmt{font-size:14px;flex:1}
+.tf-num{color:#888;font-size:14px;min-width:18px}
+.tf-btns{display:flex;gap:8px}
+.tf-btn{padding:5px 16px;border-radius:6px;border:1px solid #d0d0d0;background:#fff;font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s}
+.tf-btn:hover{border-color:#888}
+.tf-btn.sel-t{background:#1d9e75;color:#fff;border-color:#1d9e75}
+.tf-btn.sel-f{background:#d85a30;color:#fff;border-color:#d85a30}
+.tf-btn.correct{background:#1d9e75;color:#fff;border-color:#1d9e75}
+.tf-btn.wrong{background:#fcebeb;color:#a32d2d;border-color:#e24b4a}
+.tf-result{font-size:12px;margin-top:4px;padding-left:26px}
+.tf-result.ok{color:#3b6d11}
+.tf-result.err{color:#a32d2d}
+
+/* EC */
+.ec-item{margin-bottom:20px}
+.ec-wrong{font-size:14px;color:#a32d2d;margin-bottom:8px;display:flex;gap:8px}
+.ec-num{color:#888;min-width:18px;font-size:14px}
+.ec-input{width:100%;padding:8px 12px;border:1px solid #d0d0d0;border-radius:6px;font-size:14px;font-family:inherit;outline:none;transition:border .15s}
+.ec-input:focus{border-color:#5340c8}
+.ec-fb{font-size:13px;margin-top:6px;display:none}
+.ec-fb.ok{color:#3b6d11}
+.ec-fb.err{color:#a32d2d}
+
+/* BUTTONS */
+.action-row{display:flex;gap:8px;margin-top:20px}
+.btn{padding:8px 18px;border-radius:6px;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit}
+.btn-primary{background:#1a1a1a;color:#fff}
+.btn-primary:hover{background:#333}
+.btn-reset{background:#f0f0f0;color:#555}
+.btn-reset:hover{background:#e0e0e0}
+
+/* SCORE */
+.score{font-size:13px;color:#888;margin-top:14px}
+.score strong{color:#1a1a1a}
+
+/* FEEDBACK BLOCK */
+.fb-block{margin-top:16px}
+.fb-row{font-size:13px;padding:6px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:8px;align-items:baseline}
+.fb-row.ok{color:#3b6d11}
+.fb-row.err{color:#a32d2d}
+
+/* LISTENING */
+.listening-exercise{margin-bottom:32px}
+.listening-exercise + .listening-exercise{border-top:1px solid #f0f0f0;padding-top:28px}
+.audio-block{background:#f5f3ff;border:1px solid #d4cef7;border-radius:10px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.audio-label{font-size:13px;font-weight:600;color:#5340c8;white-space:nowrap}
+.audio-block audio{flex:1;height:36px;min-width:0}
+audio::-webkit-media-controls-panel{background:#f5f3ff}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="font-size:13px;font-weight:500;color:#f4521e;text-transform:uppercase;letter-spacing:.5px">Teacher Mari Lessons</div>
+  <h2>Beginner — Unit 1</h2>
+</div>
+
+<!-- TABS -->
+<div class="tabs" style="margin-top:20px">
+  <div class="tab active" id="tab-btn-vocabulary">Vocabulary</div>
+  <div class="tab" id="tab-btn-grammar">Grammar</div>
+  <div class="tab" id="tab-btn-reading">Reading</div>
+  <div class="tab" id="tab-btn-error">Error Correction</div>
+  <div class="tab" id="tab-btn-listening">Listening</div>
+</div>
+
+<!-- ══ VOCABULARY ══ -->
+<div class="section active" id="tab-vocabulary">
+  <div class="section-title">Vocabulary</div>
+  <div class="instructions">Choose the correct answer.</div>
+  <div id="mc-vocab"></div>
+  <div class="action-row">
+    <button class="btn btn-reset" id="btn-reset-vocab">Reset</button>
+  </div>
+  <div id="mc-vocab-score" class="score"></div>
+</div>
+
+<!-- ══ GRAMMAR ══ -->
+<div class="section" id="tab-grammar">
+  <div class="section-title">Grammar</div>
+  <div class="instructions">Choose the correct answer.</div>
+  <div id="mc-grammar"></div>
+  <div class="action-row">
+    <button class="btn btn-reset" id="btn-reset-grammar">Reset</button>
+  </div>
+  <div id="mc-grammar-score" class="score"></div>
+</div>
+
+<!-- ══ READING ══ -->
+<div class="section" id="tab-reading">
+  <div class="section-title">Reading</div>
+  <div class="instructions">Read the text and mark True or False.</div>
+  <div class="passage">
+    Hello! My name is Emma.<br>
+    I am a journalist and I am from England.<br>
+    This is my friend Lucas.<br>
+    He is from Brazil. He is a student.<br>
+    This is Anna.<br>
+    She is from Poland. She is a doctor.<br>
+    Today is Monday.<br>
+    We are at the Grand Hotel.<br>
+    It is a nice hotel. It's big and beautiful.
+  </div>
+  <div id="tf-wrap"></div>
+  <div class="action-row">
+    <button class="btn btn-primary" id="btn-chk-tf">Check all</button>
+    <button class="btn btn-reset" id="btn-reset-tf">Reset</button>
+  </div>
+  <div id="tf-fb" class="fb-block"></div>
+  <div id="tf-score" class="score"></div>
+</div>
+
+<!-- ══ ERROR CORRECTION ══ -->
+<div class="section" id="tab-error">
+  <div class="section-title">Error Correction</div>
+  <div class="instructions">Find and correct the mistake in each sentence.</div>
+  <div id="ec-wrap"></div>
+  <div class="action-row">
+    <button class="btn btn-primary" id="btn-chk-ec">Check all</button>
+    <button class="btn btn-reset" id="btn-reset-ec">Reset</button>
+  </div>
+  <div id="ec-score" class="score"></div>
+</div>
+
+<!-- ══ LISTENING ══ -->
+<div class="section" id="tab-listening">
+  <div class="section-title">Listening</div>
+
+  <!-- Exercise 1 -->
+  <div class="listening-exercise">
+    <div class="instructions" style="margin-bottom:12px">1 &nbsp;Listen to Ralph talking to a receptionist. Tick the correct information.</div>
+    <div class="audio-block">
+      <span class="audio-label">▶ Exercise 1</span>
+      <audio controls id="audio1">
+        <source src="https://raw.githubusercontent.com/cruzmarianagama-ux/TEACHER-MARI-AUDIO-ARTEFATO-BEG-1/main/ef5e_beginner_test_item_%20001.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+    <div id="mc-listen1"></div>
+    <div class="action-row">
+      <button class="btn btn-primary" id="btn-chk-listen1">Check all</button>
+      <button class="btn btn-reset" id="btn-reset-listen1">Reset</button>
+    </div>
+    <div id="mc-listen1-score" class="score"></div>
+  </div>
+
+  <!-- Exercise 2 -->
+  <div class="listening-exercise">
+    <div class="instructions" style="margin-bottom:12px">2 &nbsp;Listen to five conversations. Tick the correct answer.</div>
+    <div class="audio-block">
+      <span class="audio-label">▶ Exercise 2</span>
+      <audio controls id="audio2">
+        <source src="https://raw.githubusercontent.com/cruzmarianagama-ux/TEACHER-MARI-AUDIO-ARTEFATO-BEG-1/main/ef5e_beginner_test_item_%20002.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+    <div id="mc-listen2"></div>
+    <div class="action-row">
+      <button class="btn btn-primary" id="btn-chk-listen2">Check all</button>
+      <button class="btn btn-reset" id="btn-reset-listen2">Reset</button>
+    </div>
+    <div id="mc-listen2-score" class="score"></div>
+  </div>
+
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+var vocabQs=[
+  {q:"A: Hello! ______ Maria.",opts:["I am","He is","You are"],correct:0},
+  {q:"A: What's your name? B: ______ John.",opts:["You are","I am","He is"],correct:1},
+  {q:"A: Where are you from? B: I'm from ______.",opts:["France","Monday","Goodbye"],correct:0},
+  {q:"Emma is from Spain. ______ is from Spain.",opts:["He","It","She"],correct:2},
+  {q:"David is from Germany. ______ is from Germany.",opts:["He","She","It"],correct:0},
+  {q:"A: What day is it today? B: It's ______.",opts:["Brazil","Wednesday","Seven"],correct:1},
+  {q:"Which is a country?",opts:["Tuesday","Poland","Goodbye"],correct:1},
+  {q:"Which is a day of the week?",opts:["Friday","Japan","Egypt"],correct:0},
+  {q:"A: Goodbye! B: ______!",opts:["Bye","Spain","Monday"],correct:0},
+  {q:"The UK is a ______.",opts:["country","day","number"],correct:0},
+  {q:"A: Where is Sofia from? B: ______ is from Mexico.",opts:["He","It","She"],correct:2},
+  {q:"A: Where is Ben from? B: ______ is from Switzerland.",opts:["She","He","It"],correct:1},
+  {q:"______ is a beautiful country.",opts:["Thursday","Russia","Ten"],correct:1},
+  {q:"A: Hello! My name is Leo. B: Nice to meet you, Leo. ______ Ana.",opts:["He is","I am","She is"],correct:1},
+  {q:"A: What day is it today? B: It's ______.",opts:["Sunday","Nigeria","Five"],correct:0},
+  {q:"A: Goodbye! B: ______.",opts:["See you later","Egypt","Six"],correct:0},
+  {q:"Anna is from England. ______ is from England.",opts:["He","She","It"],correct:1}
+];
+
+var grammarQs=[
+  {q:"Hello! I ___ Julia.",opts:["am","is","are"],correct:0},
+  {q:"You ___ from Brazil.",opts:["am","is","are"],correct:2},
+  {q:"He ___ from Spain.",opts:["am","is","are"],correct:1},
+  {q:"She ___ from Mexico.",opts:["am","is","are"],correct:1},
+  {q:"It ___ a hotel.",opts:["am","is","are"],correct:1},
+  {q:"I ___ from England. I'm from Canada.",opts:["am not","am","is not"],correct:0},
+  {q:"She ___ from Russia. She's from Poland.",opts:["am","is","is not"],correct:2},
+  {q:"It ___ a restaurant. It is a hotel.",opts:["is","is not","are not"],correct:1},
+  {q:"___ from Brazil?",opts:["You are","Is","Are you"],correct:2},
+  {q:"___ it a hotel?",opts:["Am","Is","Are"],correct:1},
+  {q:'"Hello! ___ you Maria?"',opts:["Am","Is","Are"],correct:2},
+  {q:'"Where ___ from?"',opts:["he is","is he","are he"],correct:1},
+  {q:'"What day ___ today?"',opts:["it is","is it","are it"],correct:1},
+  {q:'"___ I in Room 5?"',opts:["Am","Is","Are"],correct:0},
+  {q:'"___ from Poland?"',opts:["Maria is","Is Maria","Maria"],correct:1}
+];
+
+var tfData=[
+  {stmt:"Emma is from England.",answer:true},
+  {stmt:"Emma is a doctor.",answer:false},
+  {stmt:"Lucas is from Brazil.",answer:true},
+  {stmt:"Lucas is a journalist.",answer:false},
+  {stmt:"Anna is a doctor.",answer:true},
+  {stmt:"Anna is from Mexico.",answer:false},
+  {stmt:"Today is Monday.",answer:true},
+  {stmt:"The hotel is small.",answer:false},
+  {stmt:"The hotel is beautiful.",answer:true}
+];
+
+var ecData=[
+  {wrong:"I am Brazil.",correct:"I am from Brazil."},
+  {wrong:"You is Maria.",correct:"You are Maria."},
+  {wrong:"Bob he is from Spaiin.",correct:"Bob is from Spain."},
+  {wrong:"Maria is my friend. He is from Mexico.",correct:"Maria is my friend. She is from Mexico."},
+  {wrong:"You are from the US?",correct:"Are you from the US?"}
+];
+
+var listen1Qs=[
+  {q:"1 &nbsp; Today is ______.",opts:["A &nbsp; Wednesday","B &nbsp; Thursday"],correct:0},
+  {q:"2 &nbsp; The table is for ______.",opts:["A &nbsp; four people","B &nbsp; eight people"],correct:1},
+  {q:"3 &nbsp; The table is for ______.",opts:["A &nbsp; 4 o'clock","B &nbsp; 8 o'clock"],correct:0},
+  {q:"4 &nbsp; Ralph's surname is ______.",opts:["A &nbsp; LANEGAN","B &nbsp; FLANEGAN"],correct:0},
+  {q:"5 &nbsp; The Townhouse is ______.",opts:["A &nbsp; a hotel","B &nbsp; a restaurant"],correct:1}
+];
+
+var listen2Qs=[
+  {q:"1 &nbsp; His name is ______.",opts:["A &nbsp; Mark Allison","B &nbsp; Mark Ellison"],correct:1},
+  {q:"2 &nbsp; He's in room ______.",opts:["A &nbsp; 311","B &nbsp; 331"],correct:1},
+  {q:"3 &nbsp; Ana's surname is ______.",opts:["A &nbsp; Gonzalez","B &nbsp; Gonzanez"],correct:0},
+  {q:"4 &nbsp; She is from ______.",opts:["A &nbsp; Mexico","B &nbsp; Spain"],correct:0},
+  {q:"5 &nbsp; The English class is on ______.",opts:["A &nbsp; Thursday","B &nbsp; Friday"],correct:0}
+];
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function showTab(id){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('tab-btn-'+id).classList.add('active');
+}
+
+['vocabulary','grammar','reading','error','listening'].forEach(function(id){
+  document.getElementById('tab-btn-'+id).addEventListener('click',function(){showTab(id);});
+});
+
+// ── MC ────────────────────────────────────────────────────────────────────────
+var mcDone={};
+var mcCorrect={};
+var listenSelected={};  // for deferred-check listening
+var listenChecked={};
+
+function getQs(prefix){
+  return prefix==='vocab'?vocabQs:prefix==='grammar'?grammarQs:prefix==='listen1'?listen1Qs:listen2Qs;
+}
+
+function isListen(prefix){return prefix==='listen1'||prefix==='listen2';}
+
+function buildMC(containerId,questions,prefix){
+  var wrap=document.getElementById(containerId);
+  var html='';
+  questions.forEach(function(q,qi){
+    html+='<div class="mc-item"><div class="mc-stem"><span class="mc-num"></span><span>'+q.q+'</span></div>';
+    html+='<div class="mc-opts">';
+    q.opts.forEach(function(opt,oi){
+      html+='<button class="mc-btn" id="'+prefix+'-'+qi+'-'+oi+'">'+opt+'</button>';
+    });
+    html+='</div><div class="mc-fb" id="'+prefix+'-fb-'+qi+'"></div></div>';
+  });
+  wrap.innerHTML=html;
+  questions.forEach(function(q,qi){
+    q.opts.forEach(function(opt,oi){
+      var btn=document.getElementById(prefix+'-'+qi+'-'+oi);
+      if(isListen(prefix)){
+        btn.addEventListener('click',function(){selListenMC(prefix,qi,oi,q.opts.length);});
+      } else {
+        btn.addEventListener('click',function(){pickMC(prefix,qi,oi,q.correct,q.opts.length);});
+      }
+    });
+  });
+}
+
+// Instant-check (vocab/grammar)
+function pickMC(prefix,qi,chosen,correct,nOpts){
+  var key=prefix+'-'+qi;
+  if(mcDone[key])return;
+  mcDone[key]=true;
+  mcCorrect[key]=(chosen===correct);
+  for(var i=0;i<nOpts;i++){
+    var el=document.getElementById(prefix+'-'+qi+'-'+i);
+    if(!el)continue;
+    el.classList.add('disabled');
+    if(i===correct)el.classList.add('ok');
+    else if(i===chosen)el.classList.add('bad');
+  }
+  var fb=document.getElementById(prefix+'-fb-'+qi);
+  if(chosen===correct){fb.className='mc-fb ok';fb.textContent='✓ Correct!';}
+  else{fb.className='mc-fb bad';fb.textContent='✗ Correct answer: '+document.getElementById(prefix+'-'+qi+'-'+correct).textContent.trim();}
+  updateMCScore(prefix);
+}
+
+// Selection-only (listening — no feedback yet)
+function selListenMC(prefix,qi,chosen,nOpts){
+  if(listenChecked[prefix])return;
+  listenSelected[prefix]=listenSelected[prefix]||{};
+  listenSelected[prefix][qi]=chosen;
+  for(var i=0;i<nOpts;i++){
+    var el=document.getElementById(prefix+'-'+qi+'-'+i);
+    if(!el)continue;
+    el.classList.remove('ok','bad','sel');
+    if(i===chosen)el.style.borderColor='#5340c8', el.style.background='#f5f3ff';
+    else el.style.borderColor='', el.style.background='';
+  }
+}
+
+// Check all for listening
+function chkListenMC(prefix){
+  if(listenChecked[prefix])return;
+  listenChecked[prefix]=true;
+  var qs=getQs(prefix);
+  var sel=listenSelected[prefix]||{};
+  var ok=0;
+  qs.forEach(function(q,qi){
+    var chosen=sel[qi];
+    var correct=q.correct;
+    var nOpts=q.opts.length;
+    for(var i=0;i<nOpts;i++){
+      var el=document.getElementById(prefix+'-'+qi+'-'+i);
+      if(!el)continue;
+      el.style.borderColor='';el.style.background='';
+      el.classList.add('disabled');
+      if(i===correct)el.classList.add('ok');
+      else if(chosen!==undefined&&i===chosen)el.classList.add('bad');
+    }
+    var fb=document.getElementById(prefix+'-fb-'+qi);
+    if(chosen===correct){
+      ok++;
+      fb.className='mc-fb ok';fb.textContent='✓ Correct!';
+    } else {
+      fb.className='mc-fb bad';
+      fb.textContent=chosen===undefined?'✗ No answer selected. Correct: '+document.getElementById(prefix+'-'+correct+'-'+correct).textContent.trim():'✗ Correct answer: '+document.getElementById(prefix+'-'+qi+'-'+correct).textContent.trim();
+    }
+  });
+  document.getElementById('mc-'+prefix+'-score').innerHTML='Score: <strong>'+ok+'/'+qs.length+'</strong>'+(ok===qs.length?' 🎉':'');
+}
+
+function updateMCScore(prefix){
+  var qs=getQs(prefix);
+  var done=0,ok=0;
+  qs.forEach(function(q,qi){
+    var key=prefix+'-'+qi;
+    if(mcDone[key]){done++;if(mcCorrect[key])ok++;}
+  });
+  if(done===qs.length){
+    var el=document.getElementById('mc-'+prefix+'-score');
+    el.innerHTML='Score: <strong>'+ok+'/'+qs.length+'</strong>'+(ok===qs.length?' 🎉':'');
+  }
+}
+
+function resetMC(prefix){
+  var qs=getQs(prefix);
+  qs.forEach(function(q,qi){
+    var key=prefix+'-'+qi;
+    delete mcDone[key];
+    delete mcCorrect[key];
+  });
+  if(isListen(prefix)){
+    listenSelected[prefix]={};
+    listenChecked[prefix]=false;
+  }
+  buildMC('mc-'+prefix,qs,prefix);
+  document.getElementById('mc-'+prefix+'-score').innerHTML='';
+}
+
+// ── TRUE OR FALSE ─────────────────────────────────────────────────────────────
+var tfSelected={};var tfChecked=false;
+function buildTF(){
+  var wrap=document.getElementById('tf-wrap');var html='';
+  tfData.forEach(function(item,i){
+    html+='<div class="tf-item"><div style="display:flex;gap:8px;flex:1"><span class="tf-num">'+(i+1)+'</span><span class="tf-stmt">'+item.stmt+'</span></div>';
+    html+='<div class="tf-btns"><button class="tf-btn" id="tf-t-'+i+'">True</button><button class="tf-btn" id="tf-f-'+i+'">False</button></div></div>';
+  });
+  wrap.innerHTML=html;
+  tfData.forEach(function(item,i){
+    document.getElementById('tf-t-'+i).addEventListener('click',function(){selTF(i,true);});
+    document.getElementById('tf-f-'+i).addEventListener('click',function(){selTF(i,false);});
+  });
+}
+function selTF(i,val){
+  if(tfChecked)return;
+  tfSelected[i]=val;
+  document.getElementById('tf-t-'+i).className='tf-btn'+(val===true?' sel-t':'');
+  document.getElementById('tf-f-'+i).className='tf-btn'+(val===false?' sel-f':'');
+}
+function chkTF(){
+  tfChecked=true;var ok=0;var fbHtml='';
+  tfData.forEach(function(item,i){
+    var tBtn=document.getElementById('tf-t-'+i);var fBtn=document.getElementById('tf-f-'+i);
+    var sel=tfSelected[i];var correct=item.answer;
+    if(sel===correct){ok++;fbHtml+='<div class="fb-row ok">✓ '+item.stmt+'</div>';}
+    else{fbHtml+='<div class="fb-row err">✗ '+item.stmt+' <span style="opacity:.7">('+( correct?'True':'False')+')</span></div>';}
+    if(correct){tBtn.classList.add('correct');}else{fBtn.classList.add('correct');}
+    if(sel!==undefined&&sel!==correct){if(sel){tBtn.classList.add('wrong');}else{fBtn.classList.add('wrong');}}
+  });
+  document.getElementById('tf-fb').innerHTML=fbHtml;
+  document.getElementById('tf-score').innerHTML='Score: <strong>'+ok+'/'+tfData.length+'</strong>'+(ok===tfData.length?' 🎉':'');
+}
+function resetTF(){
+  tfSelected={};tfChecked=false;buildTF();
+  document.getElementById('tf-fb').innerHTML='';
+  document.getElementById('tf-score').innerHTML='';
+}
+
+// ── ERROR CORRECTION ──────────────────────────────────────────────────────────
+function buildEC(){
+  var wrap=document.getElementById('ec-wrap');var html='';
+  ecData.forEach(function(item,i){
+    html+='<div class="ec-item"><div class="ec-wrong"><span class="ec-num">'+(i+1)+'</span><span>'+item.wrong+'</span></div>';
+    html+='<input class="ec-input" id="ec-inp-'+i+'" placeholder="Type the correct sentence…">';
+    html+='<div class="ec-fb" id="ec-fb-'+i+'"></div></div>';
+  });
+  wrap.innerHTML=html;
+}
+function chkEC(){
+  var ok=0;
+  ecData.forEach(function(item,i){
+    var inp=document.getElementById('ec-inp-'+i);var fb=document.getElementById('ec-fb-'+i);
+    var val=inp.value.trim();var match=val.toLowerCase()===item.correct.toLowerCase();
+    if(match)ok++;
+    inp.style.borderColor=match?'#1d9e75':'#e24b4a';
+    fb.style.display='block';fb.className='ec-fb '+(match?'ok':'err');
+    fb.textContent=match?'✓ Correct!':'✗ Correct answer: '+item.correct;
+  });
+  document.getElementById('ec-score').innerHTML='Score: <strong>'+ok+'/'+ecData.length+'</strong>'+(ok===ecData.length?' 🎉':'');
+}
+function resetEC(){
+  ecData.forEach(function(item,i){
+    var inp=document.getElementById('ec-inp-'+i);var fb=document.getElementById('ec-fb-'+i);
+    inp.value='';inp.style.borderColor='';fb.style.display='none';fb.textContent='';
+  });
+  document.getElementById('ec-score').innerHTML='';
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildMC('mc-vocab',vocabQs,'vocab');
+buildMC('mc-grammar',grammarQs,'grammar');
+buildMC('mc-listen1',listen1Qs,'listen1');
+buildMC('mc-listen2',listen2Qs,'listen2');
+buildTF();
+buildEC();
+
+document.getElementById('btn-reset-vocab').addEventListener('click',function(){resetMC('vocab');});
+document.getElementById('btn-reset-grammar').addEventListener('click',function(){resetMC('grammar');});
+document.getElementById('btn-chk-listen1').addEventListener('click',function(){chkListenMC('listen1');});
+document.getElementById('btn-chk-listen2').addEventListener('click',function(){chkListenMC('listen2');});
+document.getElementById('btn-reset-listen1').addEventListener('click',function(){resetMC('listen1');});
+document.getElementById('btn-reset-listen2').addEventListener('click',function(){resetMC('listen2');});
+document.getElementById('btn-chk-tf').addEventListener('click',chkTF);
+document.getElementById('btn-reset-tf').addEventListener('click',resetTF);
+document.getElementById('btn-chk-ec').addEventListener('click',chkEC);
+document.getElementById('btn-reset-ec').addEventListener('click',resetEC);
+</script>
+</body>
+</html>
